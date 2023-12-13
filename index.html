@@ -2,21 +2,97 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="images/icon.jpeg" />
+    <link rel="stylesheet" href="src/css/style.css" />
     <title>Athletics Progress Journal</title>
-    <script defer src="script.js"></script>
+    <script type="module" src="src/js/controller.js"></script>
   </head>
   <body>
     <header>
-      <p>Hi Chloe 😀</p>
+      <!-- -->
     </header>
     <main>
-      <a href="https://matias.ma/nsfw/" target="_blank">
-        <button class="button__dontClick">Don't click this button!</button>
-      </a>
-      <h1 class="text__dontClick hidden">Trust Me! 😉😉</h1>
+      <div class="programs">
+        <!--
+        <div class="program">
+          <div class="program--header">
+            <div class="program--header-title">Program Title</div>
+            <div class="program--header-expand">
+              <button data-status="expand" class="program--header-expand-btn">
+                <img
+                  class="program--header-expand-btn-img"
+                  src="images/expand.png"
+                />
+              </button>
+            </div>
+          </div>
+          <div class="program--weekday">
+            <button data-newday="-1" class="program--weekday-btn">
+              &#8592;
+            </button>
+            <div class="program--weekday-day">Tuesday</div>
+            <button data-newday="+1" class="program--weekday-btn">
+              &#8594;
+            </button>
+          </div>
+          <div class="workout">
+            <div class="workout--guide">
+              <span class="workout--guide-name">Exercise Name</span>
+              <div class="workout--guide-sets">
+                <span class="workout--guide-set">Set 1</span>
+                <span class="workout--guide-set">Set 2</span>
+                <span class="workout--guide-set">Set 3</span>
+                <span class="workout--guide-set">Set 4</span>
+              </div>
+            </div>
+            <div class="exercise">
+              <div class="exercise--name">
+                <span class="exercise--exercise">Barbell Benchpress</span>
+                <button class="exercise-import">
+                  Import last week's nums
+                </button>
+              </div>
+              <div class="exercise--sets">
+                <div data-set="1" class="exercise--set">
+                  <input
+                    class="exercise--weight"
+                    type="number"
+                    placeholder="weight"
+                    min="0"
+                  />
+                  <input
+                    class="exercise--reps"
+                    type="number"
+                    placeholder="reps"
+                    min="0"
+                  />
+                </div>
+                <div data-set="2" class="exercise--set">
+                  <input
+                    class="exercise--weight"
+                    type="number"
+                    placeholder="weight"
+                    min="0"
+                  />
+                  <input
+                    class="exercise--reps"
+                    type="number"
+                    placeholder="reps"
+                    min="0"
+                  />
+                </div>
+                <div data-set="3" class="exercise--set"></div>
+                <div data-set="4" class="exercise--set"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      -->
+        <button class="programs--create">+</button>
+      </div>
     </main>
-    <footer></footer>
-    <script></script>
+    <footer>
+      <!-- -->
+    </footer>
   </body>
 </html>
