@@ -4,10 +4,9 @@ class ProgramView extends View {
   _parentElement = document.querySelector(".programs");
   _data;
 
-  addHandlerCreateProgram(callback) {
-    const btn = document.querySelector(".programs--create");
-    btn.addEventListener("click", function (event) {
-      callback();
+  addHandlerRenderProgram() {
+    window.addEventListener("load", function () {
+      _parentElement;
     });
   }
 

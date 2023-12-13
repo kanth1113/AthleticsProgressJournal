@@ -2,18 +2,18 @@ export default class View {
   _data;
   _parentElement;
 
-  render() {
-    const html = this._generateHTML(this._data);
-    this.clear();
-    this._parentElement.insertAdjacentHTML("afterbegin", html);
+  render(element = this._parentElement, location = "afterbegin") {
+    const html = this._generateHTML();
+    this.clear(element);
+    element.insertAdjacentHTML(location, html);
   }
 
-  renderAdd() {
-    const html = this._generateHTML(this._data);
-    this._parentElement.insertAdjacentHTML("afterbegin", html);
+  renderAdd(element = this._parentElement, location = "afterbegin") {
+    const html = this._generateHTML();
+    element.insertAdjacentHTML(location, html);
   }
 
-  clear() {
-    this._parentElement.innerHTML = "";
+  clear(element = this._parentElement) {
+    element.innerHTML = "";
   }
 }

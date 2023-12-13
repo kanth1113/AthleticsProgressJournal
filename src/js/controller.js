@@ -1,12 +1,12 @@
 import * as model from "./model.js";
 import programView from "./views/programView.js";
+import createProgramView from "./views/createProgramView.js";
 
-const controllerCreateProgram = function () {
-  programView.renderAdd();
+const controllerCreateProgram = function (data) {
+  console.log(data);
 };
 
 const init = function () {
-  programView.addHandlerCreateProgram(controllerCreateProgram);
-  console.log("asdf");
+  createProgramView.addHandlerCreateProgram(controllerCreateProgram);
 };
 init();
