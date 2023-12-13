@@ -4,7 +4,6 @@
   },
   "name": "athletics-progress-journal",
   "version": "1.0.0",
-  "main": "script.js",
   "devDependencies": {},
   "scripts": {
     "start": "parcel index.html",
