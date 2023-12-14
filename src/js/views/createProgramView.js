@@ -15,11 +15,13 @@ class CreateProgramView extends View {
   }
 
   addHandlerCreateProgram(callback) {
+    // see _addLocalHandlers for the reasoning behind bubbling
     // prettier-ignore
-    this._form.addEventListener("submit",this._createProgram.bind(this, callback));
+    this._parentElement.addEventListener("submit", this._createProgram.bind(this, callback));
   }
 
   _createProgram(callback, event) {
+    if (!event.target.classList.contains("modal--form")) return;
     event.preventDefault();
 
     // Get the form data
@@ -31,13 +33,19 @@ class CreateProgramView extends View {
     inputs.forEach((input) => (input.value = ""));
 
     // Close the modal and reset the form
-    this._closeModal();
+    this._closeModal(event);
+    this.render();
 
     // Run the callback function
     callback(data);
   }
 
-  _closeModal() {
+  _closeModal(event) {
+    if (
+      !event.target.closest(".close-modal-btn") &&
+      !event.target.classList.contains("modal--form-submit")
+    )
+      return;
     this._parentElement.classList.add("hidden");
     this._overlay.classList.add("hidden");
   }
@@ -48,6 +56,8 @@ class CreateProgramView extends View {
   }
 
   _addExercise(event) {
+    if (!event.target.classList.contains("modal--add")) return;
+
     // Stop form from reloading the page
     event.preventDefault();
 
@@ -70,11 +80,135 @@ class CreateProgramView extends View {
   }
 
   _addLocalHandlers() {
-    this._addExerciseBtn.forEach((el) =>
-      el.addEventListener("click", this._addExercise.bind(this))
-    );
-    this._closeModalBtn.addEventListener("click", this._closeModal.bind(this));
+    /* The elements that these event listener are attached too are deleted then dynamically recreated
+     * Because of this event bubbling must be used on an element that isn't deleted so the
+     * Handlers don't get deleted
+     */
+
+    this._parentElement.addEventListener("click", this._addExercise.bind(this));
+    this._parentElement.addEventListener("click", this._closeModal.bind(this));
+
     this._openModalBtn.addEventListener("click", this._openModal.bind(this));
+  }
+
+  _generateHTML() {
+    return `
+      <div class="modal--header">
+        <h1 class="modal--header-text">Create a New Program</h1>
+        <button class="close-modal-btn">X</button>
+      </div>
+      <form class="modal--form">
+        <div class="modal--form-name">
+          <span>Program Name</span>
+          <div class="modal--form-namesub">
+            <input
+              class="modal--form-name-input"
+              name="programname"
+              placeholder="Name of Program"
+            />
+          </div>
+        </div>
+        <br />
+        <div class="modal--form-day modal--form-monday">
+          <span>Monday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="monday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="monday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-tuesday">
+          <span>Tuesday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="tuesday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="tuesday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-wednesday">
+          <span>Wednesday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="wednesday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="wednesday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-thursday">
+          <span>Thursday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="thursday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="thursday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-friday">
+          <span>Friday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="friday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="friday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-saturday">
+          <span>Saturday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="saturday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="saturday" class="modal--add">
+            +
+          </button>
+        </div>
+
+        <div class="modal--form-day modal--form-sunday">
+          <span>Sunday</span>
+          <div class="modal--form-exerise">
+            <input
+              class="modal--form-input"
+              name="sunday-1"
+              placeholder="Name of Exercise"
+            />
+          </div>
+          <button type="button" data-day="sunday" class="modal--add">
+            +
+          </button>
+        </div>
+        <button type="submit" class="modal--form-submit">Create</button>
+      </form>
+    `;
   }
 }
 export default new CreateProgramView();
