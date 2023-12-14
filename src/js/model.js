@@ -16,24 +16,31 @@ export const createProgram = function (program) {
     ),
     monday: {
       day: "Monday",
+      dayNum: 1,
     },
     tuesday: {
       day: "Tuesday",
+      dayNum: 2,
     },
     wednesday: {
       day: "Wednesday",
+      dayNum: 3,
     },
     thursday: {
       day: "Thursday",
+      dayNum: 4,
     },
     friday: {
       day: "Friday",
+      dayNum: 5,
     },
     saturday: {
       day: "Saturday",
+      dayNum: 6,
     },
     sunday: {
       day: "Sunday",
+      dayNum: 0,
     },
   };
 
@@ -47,36 +54,33 @@ export const createProgram = function (program) {
         `${value}`
       ] = [];
   }
-  console.log(state);
   // state.userData.programs[`${}`]
+};
+
+export const changeDisplayedDay = function (day, direction, program) {
+  for (const [key, value] of Object.entries(state.userData.programs)) {
+    if (key !== program) continue;
+    state.userData.programs[`${key}`].dayDisplayed += direction;
+    if (state.userData.programs[`${key}`].dayDisplayed === 7)
+      state.userData.programs[`${key}`].dayDisplayed = 0;
+    if (state.userData.programs[`${key}`].dayDisplayed === -1)
+      state.userData.programs[`${key}`].dayDisplayed = 6;
+  }
 };
 
 export const storePrograms = function () {
   localStorage.setItem("programs", JSON.stringify(state.userData.programs));
+  init();
 };
-/*
-program object template
 
-program: {
-  monday: {
-    bench: {
-      date: [weight, reps]
-      date: [weight, reps]
-    }
-    pullovers: {
-      date: [weight, reps]
-      date: [weight, reps]
-    }
-  tuesday: {
-    rows: {
-      date: [weight, reps]
-      date: [weight, reps]
-    }
-    trap : {
-      date: [weight, reps]
-      date: [weight, reps]
-    }
+const init = function () {
+  const storage = localStorage.getItem("programs");
+  if (storage) state.userData.programs = JSON.parse(storage);
+
+  // Reset dayDisplayed to today
+  for (const [key, value] of Object.entries(state.userData.programs)) {
+    const today = new Date();
+    state.userData.programs[`${key}`].dayDisplayed = today.getDay();
   }
-}
-
- */
+};
+init();

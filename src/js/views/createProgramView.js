@@ -7,6 +7,7 @@ class CreateProgramView extends View {
   _closeModalBtn = document.querySelector(".close-modal-btn");
   _overlay = document.querySelector(".overlay");
   _form = document.querySelector(".modal--form");
+  _submitBtn = document.querySelector(".modal--form-submit");
   _addExerciseBtn = document.querySelectorAll(".modal--add");
 
   constructor() {
@@ -15,37 +16,18 @@ class CreateProgramView extends View {
   }
 
   addHandlerCreateProgram(callback) {
-    // see _addLocalHandlers for the reasoning behind bubbling
     // prettier-ignore
-    this._parentElement.addEventListener("submit", this._createProgram.bind(this, callback));
+    this._submitBtn.addEventListener("click", this._createProgram.bind(this, callback));
   }
 
-  _createProgram(callback, event) {
-    if (!event.target.classList.contains("modal--form")) return;
-    event.preventDefault();
-
+  _createProgram(callback) {
     // Get the form data
     const dataArray = [...new FormData(this._form)];
     const data = Object.fromEntries(dataArray);
-
-    // Clear the form
-    const inputs = Array.from(document.querySelectorAll(".modal--form-input"));
-    inputs.forEach((input) => (input.value = ""));
-
-    // Close the modal and reset the form
-    this._closeModal(event);
-    this.render();
-
-    // Run the callback function
     callback(data);
   }
 
   _closeModal(event) {
-    if (
-      !event.target.closest(".close-modal-btn") &&
-      !event.target.classList.contains("modal--form-submit")
-    )
-      return;
     this._parentElement.classList.add("hidden");
     this._overlay.classList.add("hidden");
   }
@@ -56,11 +38,6 @@ class CreateProgramView extends View {
   }
 
   _addExercise(event) {
-    if (!event.target.classList.contains("modal--add")) return;
-
-    // Stop form from reloading the page
-    event.preventDefault();
-
     // Use the data in the html to find the day and number corresponding with the + that was clicked
     this._data.day = event.srcElement.dataset.day;
     this._data.number =
@@ -84,9 +61,10 @@ class CreateProgramView extends View {
      * Because of this event bubbling must be used on an element that isn't deleted so the
      * Handlers don't get deleted
      */
-
-    this._parentElement.addEventListener("click", this._addExercise.bind(this));
-    this._parentElement.addEventListener("click", this._closeModal.bind(this));
+    this._addExerciseBtn.forEach((el) =>
+      el.addEventListener("click", this._addExercise.bind(this))
+    );
+    this._closeModalBtn.addEventListener("click", this._closeModal.bind(this));
 
     this._openModalBtn.addEventListener("click", this._openModal.bind(this));
   }
