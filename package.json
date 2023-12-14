@@ -1,14 +1,7 @@
 {
-  "dependencies": {
-    "parcel": "^2.10.3"
-  },
   "name": "athletics-progress-journal",
   "version": "1.0.0",
-  "devDependencies": {},
-  "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "description": ""
