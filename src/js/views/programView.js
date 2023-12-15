@@ -77,13 +77,20 @@ class ProgramView extends View {
   }
 
   _saveExerciseData(callback, event) {
-    // Guard Clause
     if (!event.target.closest(".exercise--save-btn")) return;
 
     // Get the weight/reps data for each set
-    const [...sets] = event.target
+    let [...setsElements] = event.target
       .closest(".exercise")
       .querySelectorAll(".exercise--set");
+
+    // Make an array of data with the information from the sets of an exercise
+    const sets = setsElements.map(el => {
+      const set = el.dataset.set;
+      const weight = el.querySelector(".exercise--weight").value;
+      const reps = el.querySelector(".exercise--reps").value;
+      return [set, +weight, +reps];
+    });
 
     // DOM Traversal to find the program, day, and exercise
     const program = event.target.closest(".program").dataset.programname;
@@ -92,7 +99,8 @@ class ProgramView extends View {
       .querySelector(".program--weekday-day").textContent;
 
     day = day.slice(0, 1).toLowerCase() + day.slice(1);
-    const exercise = sets[0].parentElement.dataset.exercise;
+    day = day.split(" ")[0];
+    const exercise = setsElements[0].parentElement.dataset.exercise;
 
     // Send sets and exercise through callback
     callback(program, day, exercise, sets);
@@ -164,7 +172,7 @@ class ProgramView extends View {
                 <span class="workout--guide-set">Set 4</span>
               </div>
             </div>
-            ${this._generateExerciseHTML(day)}
+            ${this._generateExerciseHTML(day, value.weekNumber)}
           </div>
         </div>
         `;
@@ -172,7 +180,7 @@ class ProgramView extends View {
     return html;
   }
 
-  _generateExerciseHTML(data) {
+  _generateExerciseHTML(data, weekNum) {
     let html = "";
     for (const [key, value] of Object.entries(data)) {
       if (key === "day" || key === "dayNum") continue;
@@ -193,12 +201,14 @@ class ProgramView extends View {
                 type="number"
                 placeholder="weight"
                 min="0"
+                value="${value[`week${weekNum}`]?.set1?.weight ?? ""}"
               />
               <input
                 class="exercise--reps"
                 type="number"
                 placeholder="reps"
                 min="0"
+                value="${value[`week${weekNum}`]?.set1?.reps ?? ""}"
               />
             </div>
             <div data-set="2" class="exercise--set">
@@ -207,12 +217,14 @@ class ProgramView extends View {
                 type="number"
                 placeholder="weight"
                 min="0"
+                value="${value[`week${weekNum}`]?.set2?.weight ?? ""}"
               />
               <input
                 class="exercise--reps"
                 type="number"
                 placeholder="reps"
                 min="0"
+                value="${value[`week${weekNum}`]?.set2?.reps ?? ""}"
               />
             </div>
             <div data-set="3" class="exercise--set">
@@ -221,12 +233,14 @@ class ProgramView extends View {
                 type="number"
                 placeholder="weight"
                 min="0"
+                value="${value[`week${weekNum}`]?.set3?.weight ?? ""}"
               />
               <input
                 class="exercise--reps"
                 type="number"
                 placeholder="reps"
                 min="0"
+                value="${value[`week${weekNum}`]?.set3?.reps ?? ""}"
               />
             </div>
             <div data-set="4" class="exercise--set">
@@ -235,12 +249,14 @@ class ProgramView extends View {
                 type="number"
                 placeholder="weight"
                 min="0"
+                value="${value[`week${weekNum}`]?.set4?.weight ?? ""}"
               />
               <input
                 class="exercise--reps"
                 type="number"
                 placeholder="reps"
                 min="0"
+                value="${value[`week${weekNum}`]?.set4?.reps ?? ""}"
               />
             </div>
           </div>

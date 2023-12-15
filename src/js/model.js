@@ -115,13 +115,29 @@ export const deleteProgram = function (program) {
 };
 
 export const saveProgramData = function (program, day, exercise, sets) {
-  console.log(state.userData.programs[`${program}`].daysOfTheWeek[`${day}`]);
+  const weekNum = state.userData.programs[`${program}`].weekNumber;
 
-  const setsDestination =
-    state.userData.programs[`${program}`].daysOfTheWeek[`${day}`][
-      `${exercise}`
-    ];
-  console.log(setsDestination);
+  state.userData.programs[`${program}`].daysOfTheWeek[`${day}`][`${exercise}`][
+    `week${weekNum}`
+  ] = {
+    set1: {
+      weight: sets[0][1],
+      reps: sets[0][2],
+    },
+    set2: {
+      weight: sets[1][1],
+      reps: sets[1][2],
+    },
+    set3: {
+      weight: sets[2][1],
+      reps: sets[2][2],
+    },
+    set4: {
+      weight: sets[3][1],
+      reps: sets[3][2],
+    },
+  };
+  localStorageStorePrograms();
 };
 
 const init = function () {
@@ -131,5 +147,18 @@ const init = function () {
   // Reset dayDisplayed to today
   setDayDisplayed();
   setWeekNumber();
+
+  localStorageStorePrograms();
 };
 init();
+
+// REMOVE in future
+const TEMPORARYBUTTON = function () {
+  document
+    .querySelector(".TEMPORARYBUTTON")
+    .addEventListener("click", function () {
+      console.log(state.userData.programs);
+    });
+};
+
+TEMPORARYBUTTON();
