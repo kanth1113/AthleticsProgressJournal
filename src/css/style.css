@@ -16,6 +16,7 @@ body {
 }
 
 .program--header {
+  position: relative;
   display: flex;
 }
 .program--header-title {
@@ -23,12 +24,15 @@ body {
   font-size: 30px;
   font-weight: bold;
 }
-.program--header-expand {
+.program--header-settings {
   width: 100px;
   margin-right: 30px;
 }
-.program--header-expand-btn {
-  width: 90px;
+.program--header-settings-btn {
+  width: 1em;
+  height: 2em;
+  font-size: 50px;
+  margin: 10px;
   border: none;
   background-color: white;
   cursor: pointer;
@@ -36,7 +40,29 @@ body {
 .program--header-expand-btn-img {
   width: 75px;
 }
+.program--settings-modal {
+  background-color: lightgrey;
+  padding: 20px;
+  position: absolute;
+  top: 100px;
+  right: 10px;
+  z-index: 101;
+}
+.program--settings-delete-input {
+  display: block;
+  width: 97%;
+}
+.program--settings-modal-abracadabra {
+  display: block;
+}
+.program--settings-modal-cc {
+  display: flex;
+}
 
+.program--settings-confirm-btn,
+.program--settings-cancel-btn {
+  flex: 1;
+}
 .program--weekday {
   display: flex;
   justify-content: space-between;

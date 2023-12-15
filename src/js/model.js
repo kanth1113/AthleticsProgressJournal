@@ -73,6 +73,12 @@ export const storePrograms = function () {
   init();
 };
 
+export const deleteProgram = function (program) {
+  delete state.userData.programs[`${program}`];
+  console.log(state.userData.programs);
+  storePrograms();
+};
+
 const init = function () {
   const storage = localStorage.getItem("programs");
   if (storage) state.userData.programs = JSON.parse(storage);

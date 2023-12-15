@@ -3,8 +3,8 @@ import View from "./View.js";
 
 class ProgramView extends View {
   _parentElement = document.querySelector(".programs");
-
   _data;
+  _overlay = document.querySelector(".overlay");
 
   constructor() {
     super();
@@ -17,6 +17,10 @@ class ProgramView extends View {
   addHandlerChangeDisplayedDay(callback) {
     // prettier-ignore
     this._parentElement.addEventListener("click", this._changeDisplayedDay.bind(this, callback));
+  }
+  addHandlerDeleteProgram(callback) {
+    // prettier-ignore
+    this._parentElement.addEventListener("click", this._deleteProgram.bind(this, callback));
   }
 
   _changeDisplayedDay(callback, event) {
@@ -34,8 +38,46 @@ class ProgramView extends View {
     callback(day, direction, program);
   }
 
+  _openSettings(event) {
+    if (!event.target.closest(".program--header-settings-btn")) return;
+
+    const btn = event.target.closest(".program--header-settings-btn");
+    const modal = btn
+      .closest(".program--header")
+      .querySelector(".program--settings-modal");
+
+    modal.classList.remove("hidden");
+  }
+
   _addLocalHandlers() {
-    //
+    this._parentElement.addEventListener(
+      "click",
+      this._openSettings.bind(this)
+    );
+  }
+
+  _deleteProgram(callback, event) {
+    // Close modal when cancel is clicked
+    if (event.target.closest(".program--settings-cancel-btn"))
+      event.target.closest(".program--settings-modal").classList.add("hidden");
+    // Guard Clause
+    if (!event.target.closest(".program--settings-confirm-btn")) return;
+
+    // Use DOM traversal to find the input
+    const input = event.target
+      .closest(".program--settings-modal")
+      .querySelector(".program--settings-delete-input");
+    console.log(input);
+
+    if (input.value === "abracadabra") {
+      const program = event.target.closest(".program").dataset.programname;
+      callback(program);
+    } else {
+      const html = `
+      <span style="color: red; display:block;">Please type 'abracadabra' (case sensitive)</span>
+      `;
+      input.insertAdjacentHTML("beforebegin", html);
+    }
   }
 
   _generateHTML() {
@@ -62,11 +104,19 @@ class ProgramView extends View {
         <div class="program" data-programname="${d[`${key}`].name}">
           <div class="program--header">
             <div class="program--header-title">${value.name}</div>
-            <div class="program--header-expand">
-              <button data-status="expand" class="program--header-expand-btn">...
-              </button>
+            <div class="program--header-settings">
+              <button class="program--header-settings-btn">...</button>
+            </div>
+            <div class="program--settings-modal hidden">
+              <span class="program--settings-modal-abracadabra">Type 'abracadabra' to delete this program</span>
+              <input placeholder="abracadabra" class="program--settings-delete-input">
+              <div class="program--settings-modal-cc">
+                <button class="program--settings-confirm-btn">Confirm</button>
+                <button class="program--settings-cancel-btn">Cancel</button>
+              </div>
             </div>
           </div>
+          
           <div class="program--weekday">
             <button data-newday="-1" class="program--weekday-btn">
               &#8592;

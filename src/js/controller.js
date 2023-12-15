@@ -14,6 +14,10 @@ const controllerCreateProgram = function (data) {
   programView.render(model.state.userData.programs);
 };
 
+const controllerDeleteProgram = function (program) {
+  model.deleteProgram(program);
+  programView.render(model.state.userData.programs);
+};
 const controllerChangeDisplayedDay = function (day, direction, program) {
   model.changeDisplayedDay(day, direction, program);
   programView.render(model.state.userData.programs);
@@ -23,5 +27,6 @@ const init = function () {
   createProgramView.addHandlerCreateProgram(controllerCreateProgram);
   programView.addHandlerRenderPrograms(controllerRenderPrograms);
   programView.addHandlerChangeDisplayedDay(controllerChangeDisplayedDay);
+  programView.addHandlerDeleteProgram(controllerDeleteProgram);
 };
 init();

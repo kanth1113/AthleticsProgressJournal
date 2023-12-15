@@ -5,6 +5,7 @@ class CreateProgramView extends View {
   _parentElement = document.querySelector(".modal");
   _openModalBtn = document.querySelector(".open-modal-btn");
   _closeModalBtn = document.querySelector(".close-modal-btn");
+
   _overlay = document.querySelector(".overlay");
   _form = document.querySelector(".modal--form");
   _submitBtn = document.querySelector(".modal--form-submit");
