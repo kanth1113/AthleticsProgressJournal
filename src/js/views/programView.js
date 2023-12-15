@@ -115,7 +115,7 @@ class ProgramView extends View {
 
   _generateHTML() {
     // Guard Clause
-    if (!this._data) return;
+    if (Object.keys(this._data).length === 0) return;
 
     // Put the data into a shorter variable
     const d = this._data;
