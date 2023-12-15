@@ -22,6 +22,10 @@ class ProgramView extends View {
     // prettier-ignore
     this._parentElement.addEventListener("click", this._deleteProgram.bind(this, callback));
   }
+  addHandlerSaveExerciseData(callback) {
+    // prettier-ignore
+    this._parentElement.addEventListener("click", this._saveExerciseData.bind(this, callback));
+  }
 
   _changeDisplayedDay(callback, event) {
     if (!event.target.closest(".program--weekday-btn")) return;
@@ -49,13 +53,6 @@ class ProgramView extends View {
     modal.classList.remove("hidden");
   }
 
-  _addLocalHandlers() {
-    this._parentElement.addEventListener(
-      "click",
-      this._openSettings.bind(this)
-    );
-  }
-
   _deleteProgram(callback, event) {
     // Close modal when cancel is clicked
     if (event.target.closest(".program--settings-cancel-btn"))
@@ -67,7 +64,6 @@ class ProgramView extends View {
     const input = event.target
       .closest(".program--settings-modal")
       .querySelector(".program--settings-delete-input");
-    console.log(input);
 
     if (input.value === "abracadabra") {
       const program = event.target.closest(".program").dataset.programname;
@@ -80,26 +76,56 @@ class ProgramView extends View {
     }
   }
 
+  _saveExerciseData(callback, event) {
+    // Guard Clause
+    if (!event.target.closest(".exercise--save-btn")) return;
+
+    // Get the weight/reps data for each set
+    const [...sets] = event.target
+      .closest(".exercise")
+      .querySelectorAll(".exercise--set");
+
+    // DOM Traversal to find the program, day, and exercise
+    const program = event.target.closest(".program").dataset.programname;
+    let day = event.target
+      .closest(".program")
+      .querySelector(".program--weekday-day").textContent;
+
+    day = day.slice(0, 1).toLowerCase() + day.slice(1);
+    const exercise = sets[0].parentElement.dataset.exercise;
+
+    // Send sets and exercise through callback
+    callback(program, day, exercise, sets);
+  }
+
+  _addLocalHandlers() {
+    this._parentElement.addEventListener(
+      "click",
+      this._openSettings.bind(this)
+    );
+  }
+
   _generateHTML() {
+    // Guard Clause
+    if (!this._data) return;
+
     // Put the data into a shorter variable
     const d = this._data;
 
-    // Get today's date
-    const t = new Date();
-    const today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
-    // String version of the day of the week
-    const weekday = DOTW[today.getDay()];
-
     let html = "";
+    let weekday;
 
+    // Loop over each program
     for (const [key, value] of Object.entries(d)) {
       const dayNumber = d[`${key}`].dayDisplayed;
-      let weekday;
+      // Loop over each day of the week within each program
       for (let i = 0; i < DOTW.length; i++) {
-        if (d[`${key}`][`${DOTW[i]}`].dayNum === dayNumber) weekday = DOTW[i];
+        // Set weekday equal to the day of the week that matches the dayDisplayed
+        if (d[`${key}`].daysOfTheWeek[`${DOTW[i]}`].dayNum === dayNumber)
+          weekday = DOTW[i];
       }
-
-      const day = value[`${weekday}`];
+      // Print the workout corresponding with the desired day of the week
+      const day = value.daysOfTheWeek[`${weekday}`];
       html += `
         <div class="program" data-programname="${d[`${key}`].name}">
           <div class="program--header">
@@ -121,7 +147,9 @@ class ProgramView extends View {
             <button data-newday="-1" class="program--weekday-btn">
               &#8592;
             </button>
-            <div class="program--weekday-day">${day.day}</div>
+            <div class="program--weekday-day">${day.day} - Week ${
+        value.weekNumber
+      }</div>
             <button data-newday="1" class="program--weekday-btn">
               &#8594;
             </button>
@@ -158,7 +186,7 @@ class ProgramView extends View {
             </button>
             -->
           </div>
-          <div class="exercise--sets">
+          <div data-exercise="${key}" class="exercise--sets">
             <div data-set="1" class="exercise--set">
               <input
                 class="exercise--weight"
@@ -216,6 +244,7 @@ class ProgramView extends View {
               />
             </div>
           </div>
+          <button class="exercise--save-btn">Save</button>
         </div>
       `;
     }

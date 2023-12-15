@@ -9,18 +9,23 @@ const controllerRenderPrograms = function () {
 const controllerCreateProgram = function (data) {
   // Get the data from the DOM and create the program object
   model.createProgram(data);
-  model.storePrograms();
+  model.localStorageStorePrograms();
   // Take the program object and display it on the page
-  programView.render(model.state.userData.programs);
+  controllerRenderPrograms();
 };
 
 const controllerDeleteProgram = function (program) {
   model.deleteProgram(program);
-  programView.render(model.state.userData.programs);
+  controllerRenderPrograms();
 };
+
 const controllerChangeDisplayedDay = function (day, direction, program) {
   model.changeDisplayedDay(day, direction, program);
-  programView.render(model.state.userData.programs);
+  controllerRenderPrograms();
+};
+
+const controllerSaveExerciseData = function (program, day, exercise, sets) {
+  model.saveProgramData(program, day, exercise, sets);
 };
 
 const init = function () {
@@ -28,5 +33,6 @@ const init = function () {
   programView.addHandlerRenderPrograms(controllerRenderPrograms);
   programView.addHandlerChangeDisplayedDay(controllerChangeDisplayedDay);
   programView.addHandlerDeleteProgram(controllerDeleteProgram);
+  programView.addHandlerSaveExerciseData(controllerSaveExerciseData);
 };
 init();
